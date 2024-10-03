@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="js/vendor/codemirror/lib/codemirror.css?v=5.1.3">
     <link rel="stylesheet" type="text/css" href="js/vendor/codemirror/addon/hint/show-hint.css?v=5.1.3">
     <link rel="stylesheet" type="text/css" href="js/vendor/codemirror/addon/lint/lint.css?v=5.1.3">
-    <link rel="stylesheet" type="text/css" href="./themes/pmahomme/css/theme.css?v=5.1.3&nocache=1320677229ltr&server=1">
+    <link rel="stylesheet" type="text/css" href="./themes/pmahomme/css/theme.css?v=5.1.3&nocache=2188478203ltr&server=1">
     <link rel="stylesheet" type="text/css" href="./themes/pmahomme/css/printview.css?v=5.1.3" media="print" id="printcss">
     <title>localhost / 127.0.0.1 | phpMyAdmin 5.1.3</title>
     <script data-cfasync="false" type="text/javascript" src="js/vendor/jquery/jquery.min.js?v=5.1.3"></script>
@@ -56,7 +56,7 @@
 
 <script data-cfasync="false" type="text/javascript">
 // <![CDATA[
-CommonParams.setAll({common_query:"",opendb_url:"index.php?route=/database/structure",lang:"es",server:"1",table:"",db:"",token:"6669766a6b393a50477835622b322e33",text_dir:"ltr",show_databases_navigation_as_tree:true,pma_text_default_tab:"Examinar",pma_text_left_default_tab:"Estructura",pma_text_left_default_tab2:false,LimitChars:"50",pftext:"P",confirm:true,LoginCookieValidity:"1440",session_gc_maxlifetime:"1440",logged_in:true,is_https:false,rootPath:"/phpmyadmin/",arg_separator:"&",PMA_VERSION:"5.1.3",auth_type:"config",user:"root"});
+CommonParams.setAll({common_query:"",opendb_url:"index.php?route=/database/structure",lang:"es",server:"1",table:"",db:"",token:"3453576d70315c6c6c797c6a476a2777",text_dir:"ltr",show_databases_navigation_as_tree:true,pma_text_default_tab:"Examinar",pma_text_left_default_tab:"Estructura",pma_text_left_default_tab2:false,LimitChars:"50",pftext:"P",confirm:true,LoginCookieValidity:"1440",session_gc_maxlifetime:"1440",logged_in:true,is_https:false,rootPath:"/phpmyadmin/",arg_separator:"&",PMA_VERSION:"5.1.3",auth_type:"config",user:"root"});
 var firstDayOfCalendar = '0';
 var themeImagePath = '.\/themes\/pmahomme\/img\/';
 var mysqlDocTemplate = '.\/url.php\u003Furl\u003Dhttps\u00253A\u00252F\u00252Fdev.mysql.com\u00252Fdoc\u00252Frefman\u00252F8.0\u00252Fen\u00252F\u002525s.html';
@@ -260,7 +260,7 @@ $(function() {
       </div>
       <div id="pma_navigation_tree" class="list_container synced highlight autoexpand">
 
-  <div class="pma_quick_warp"><div class="drop_list"><button title="Tablas recientes" class="drop_button btn">Reciente</button><ul id="pma_recent_list"><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=risk&table=partida">`risk`.`partida`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=buscaminas&table=tablero">`buscaminas`.`tablero`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=personas">`almacenpersonas`.`personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=persona">`almacenpersonas`.`persona`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=Personas">`almacenpersonas`.`Personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=ejemplo1&table=personas">`ejemplo1`.`personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=ejemplo1&table=rolesasignados">`ejemplo1`.`rolesasignados`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=ejemplo1&table=roles">`ejemplo1`.`roles`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=protectora&table=gastofecha">`protectora`.`gastofecha`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=protectora&table=animales">`protectora`.`animales`</a></li></ul></div><div class="drop_list"><button title="Tablas favoritas" class="drop_button btn">Favoritas</button><ul id="pma_favorite_list"><li class="warp_link">No existen tablas favoritas.</li></ul></div><div class="clearfloat"></div></div>
+  <div class="pma_quick_warp"><div class="drop_list"><button title="Tablas recientes" class="drop_button btn">Reciente</button><ul id="pma_recent_list"><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=risk&table=partida">`risk`.`partida`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=risk&table=usuario">`risk`.`usuario`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=risk&table=rol">`risk`.`rol`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=risk&table=rol_usuario">`risk`.`rol_usuario`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=buscaminas&table=tablero">`buscaminas`.`tablero`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=personas">`almacenpersonas`.`personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=persona">`almacenpersonas`.`persona`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=almacenpersonas&table=Personas">`almacenpersonas`.`Personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=ejemplo1&table=personas">`ejemplo1`.`personas`</a></li><li class="warp_link"><a href="index.php?route=/table/recent-favorite&db=ejemplo1&table=rolesasignados">`ejemplo1`.`rolesasignados`</a></li></ul></div><div class="drop_list"><button title="Tablas favoritas" class="drop_button btn">Favoritas</button><ul id="pma_favorite_list"><li class="warp_link">No existen tablas favoritas.</li></ul></div><div class="clearfloat"></div></div>
 
 <div class="clearfloat"></div>
 
@@ -284,7 +284,7 @@ $(function() {
                   <div id="pma_navigation_settings"><div class="page_settings"><form method="post" action="index.php&#x3F;route&#x3D;&#x25;2Fexport&amp;server&#x3D;1" class="config-form disableAjax">
   <input type="hidden" name="tab_hash" value="">
       <input type="hidden" name="check_page_refresh" id="check_page_refresh" value="">
-    <input type="hidden" name="token" value="6669766a6b393a50477835622b322e33">
+    <input type="hidden" name="token" value="3453576d70315c6c6c797c6a476a2777">
   <input type="hidden" name="submit_save" value="Navi">
 <ul class="tabs responsivetable row">
       <li><a href="#Navi_panel">Panel de navegación</a></li>
@@ -561,8 +561,8 @@ $.extend(defaultValues, {
                     <span class="hide" id="instructions-1">
                         Presione Enter para ejecutar la consulta                    </span>
                 </div>
-                                                            <div class="message history collapsed hide"
-                            targetdb="risk" targettable="">
+                                                            <div class="message history collapsed hide select"
+                            targetdb="risk" targettable="partida">
                             <div class="action_content">
                     <span class="action collapse">
             Colapsar
@@ -597,15 +597,45 @@ $.extend(defaultValues, {
                             : <span>durante la sesión actual</span>
                     </span>
             </div>
-                            <span class="query">CREATE TABLE PARTIDA(
-ID_PARTIDA INT(5) NOT NULL AUTO_INCREMENT,
-TABLERO VARCHAR(255),
-RESULTADO INT(1),
-ID_USUARIO INT(5) NOT NULL,
-CONSTRAINT PK_PARTIDA PRIMARY KEY (ID_PARTIDA),
-CONSTRAINT FK_PARTIDA FOREIGN KEY (ID_USUARIO)
-    REFERENCES USUARIO(ID_USUARIO)
-);</span>
+                            <span class="query">SELECT * FROM `partida`</span>
+                        </div>
+                                            <div class="message history collapsed hide"
+                            targetdb="risk" targettable="partida">
+                            <div class="action_content">
+                    <span class="action collapse">
+            Colapsar
+                    </span>
+                            <span class="action expand">
+            Expandir
+                    </span>
+                            <span class="action requery">
+            Reconsultar
+                    </span>
+                            <span class="action edit">
+            Editar
+                    </span>
+                            <span class="action explain">
+            Explicar
+                    </span>
+                            <span class="action profiling">
+            Perfilando
+                    </span>
+                            <span class="action bookmark">
+            Agregar a favoritos
+                    </span>
+                            <span class="text failed">
+            Falló la consulta
+                    </span>
+                            <span class="text targetdb">
+            Base de datos
+                            : <span>risk</span>
+                    </span>
+                            <span class="text query_time">
+            Fecha y hora la consulta
+                            : <span>durante la sesión actual</span>
+                    </span>
+            </div>
+                            <span class="query">ALTER TABLE `partida` ADD UNIQUE(`ID_TABLERO`);</span>
                         </div>
                                             <div class="message history collapsed hide select"
                             targetdb="risk" targettable="partida">
@@ -644,6 +674,91 @@ CONSTRAINT FK_PARTIDA FOREIGN KEY (ID_USUARIO)
                     </span>
             </div>
                             <span class="query">SELECT * FROM `partida`</span>
+                        </div>
+                                            <div class="message history collapsed hide"
+                            targetdb="risk" targettable="partida">
+                            <div class="action_content">
+                    <span class="action collapse">
+            Colapsar
+                    </span>
+                            <span class="action expand">
+            Expandir
+                    </span>
+                            <span class="action requery">
+            Reconsultar
+                    </span>
+                            <span class="action edit">
+            Editar
+                    </span>
+                            <span class="action explain">
+            Explicar
+                    </span>
+                            <span class="action profiling">
+            Perfilando
+                    </span>
+                            <span class="action bookmark">
+            Agregar a favoritos
+                    </span>
+                            <span class="text failed">
+            Falló la consulta
+                    </span>
+                            <span class="text targetdb">
+            Base de datos
+                            : <span>risk</span>
+                    </span>
+                            <span class="text query_time">
+            Fecha y hora la consulta
+                            : <span>durante la sesión actual</span>
+                    </span>
+            </div>
+                            <span class="query">ALTER TABLE `partida` DROP `ID_TABLERO`;</span>
+                        </div>
+                                            <div class="message history collapsed hide"
+                            targetdb="risk" targettable="partida">
+                            <div class="action_content">
+                    <span class="action collapse">
+            Colapsar
+                    </span>
+                            <span class="action expand">
+            Expandir
+                    </span>
+                            <span class="action requery">
+            Reconsultar
+                    </span>
+                            <span class="action edit">
+            Editar
+                    </span>
+                            <span class="action explain">
+            Explicar
+                    </span>
+                            <span class="action profiling">
+            Perfilando
+                    </span>
+                            <span class="action bookmark">
+            Agregar a favoritos
+                    </span>
+                            <span class="text failed">
+            Falló la consulta
+                    </span>
+                            <span class="text targetdb">
+            Base de datos
+                            : <span>risk</span>
+                    </span>
+                            <span class="text query_time">
+            Fecha y hora la consulta
+                            : <span>durante la sesión actual</span>
+                    </span>
+            </div>
+                            <span class="query">CREATE TABLE TERRITORIO (
+ID_TERRITORIO INT(20) AUTO_INCREMENT NOT NULL,
+POSICION INT(4) NOT NULL,
+TROPA VARCHAR(1) NOT NULL,
+CANTIDAD INT(3) NOT NULL,
+ID_PARTIDA INT(5) NOT NULL,
+CONSTRAINT PK_TERRITORIO PRIMARY KEY (ID_TERRITORIO),
+CONSTRAINT FK_TERRITORIO_ID_PARTIDA FOREIGN KEY (ID_PARTIDA)
+    REFERENCES PARTIDA (ID_PARTIDA)
+);</span>
                         </div>
                                                 </div><!-- console_message_container -->
             <div class="query_input">
