@@ -1,7 +1,7 @@
 <?php
 require_once 'territorio.php';
 class Tablero{
-    
+    public $vector;
 
     public function __construct($longitud=20){
         $this->vector=array_fill(0,$longitud,0);
@@ -21,16 +21,14 @@ class Tablero{
             }
         }
      
-       $this->repartirSobrantes(($canTropas-count($this->vector))/2);
-        
-            
-    }
-
-     function repartirSobrantes($sobrantes){
-        $troJ=$sobrantes;
-        $troM=$sobrantes;
+       
+       
+        $troJ=($canTropas-count($this->vector))/2;
+        $troM=($canTropas-count($this->vector))/2;
         $tropasJ=0;
+        //echo 'J INicio '.$tropasJ.'<br>';
         $tropasM=0;
+        //echo 'M Inicio '.$tropasM.'<br>';
         $cuantas=0;
         while($tropasJ<$troJ||$tropasM<$troJ){
             
@@ -49,5 +47,7 @@ class Tablero{
             }
              
         }
+        
+            
     }
 }
