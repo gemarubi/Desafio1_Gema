@@ -6,8 +6,8 @@ class Territorio{
     public $tropa;
     public $cantidad;
 
-    public function __construct(/*$id=0*/$posicion,$tropa, $cantidad=0){
-       // $this->id=$id; no me funciona
+    public function __construct($id=1, $posicion,$tropa, $cantidad=0){
+        $this->id=$id;
         $this->posicion=$posicion;
         $this->tropa = $tropa;
         $this->cantidad = $cantidad;
