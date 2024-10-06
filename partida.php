@@ -6,9 +6,9 @@ class Partida{
     public $resultado;
     public $id_usuario;
 
-    public function __construct( $resultado, $id_usuario,$idPartida=0, $longitud=20){
+    public function __construct(  $id_usuario,$resultado=0 ,$idPartida=0, $longitud=20){
         $this->idPartida = $idPartida;
-        $this->vector = array_fill(0,$longitud,0);
+        $this->vector = array_fill(1,$longitud,0);
         $this->resultado = $resultado;
         $this->id_usuario = $id_usuario;
     }
@@ -19,7 +19,7 @@ class Partida{
             $this->vector[$value]=new Territorio($value,'J',1);
         }
 
-        for ($i=0; $i < count($this->vector); $i++) { 
+        for ($i=1; $i < count($this->vector); $i++) { 
             if($this->vector[$i] instanceof Territorio){
                 $this->vector[$i]->cantidad=1;
             }else{
