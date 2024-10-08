@@ -6,14 +6,14 @@ class Partida{
     public $resultado;
     public $id_usuario;
 
-    public function __construct(  $id_usuario,$resultado=0 ,$idPartida=0, $longitud=20){
+    public function __construct(  $id_usuario, $resultado=0 ,$idPartida=0, $longitud=20){
         $this->idPartida = $idPartida;
-        $this->vector = array_fill(1,$longitud,0);
+        $this->vector = array_fill(0,$longitud,0);
         $this->resultado = $resultado;
         $this->id_usuario = $id_usuario;
     }
 
-    public function distribuirTropas($canTropas=30){
+    public function distribuirTropas(){
         $aleatorio=array_rand($this->vector,count($this->vector)/2); 
         foreach ($aleatorio as  $value) {
             $this->vector[$value]=new Territorio($value,'J',1);
@@ -26,35 +26,37 @@ class Partida{
                 $this->vector[$i]= new Territorio($i,'M',1);
             }
         }
-        
-        $this->aniadirSobrantes($canTropas);
             
     }
 
-    function aniadirSobrantes($canTropas){
-        $troJ=($canTropas-count($this->vector))/2;
-        $troM=($canTropas-count($this->vector))/2;
+    function aniadirSobrantes($tropa,$canTropas=5){
+        
         $tropasJ=0;
-        //echo 'J INicio '.$tropasJ.'<br>';
-        $tropasM=0;
-        //echo 'M Inicio '.$tropasM.'<br>';
         $cuantas=0;
-        while($tropasJ<$troJ||$tropasM<$troJ){
+        while($tropasJ<$canTropas){
             
             $aleatorio=array_rand($this->vector,1);
-            if($this->vector[$aleatorio]->tropa=='J' && $tropasJ<$troJ){
+            if($this->vector[$aleatorio]->tropa==$tropa){
                
-                $cuantas=rand(1,$troJ-$tropasJ);
+                $cuantas=rand(1,$canTropas-$tropasJ);
                 $this->vector[$aleatorio]->cantidad+=$cuantas;
                 $tropasJ+=$cuantas;
-                //echo 'J: '.$tropasJ.' + '.$cuantas.'<br>';
-            }else if($tropasM<$troM){
-                $cuantas=rand(1,$troM-$tropasM);
-                $this->vector[$aleatorio]->cantidad+=$cuantas;
-                $tropasM+=$cuantas;
-                //echo 'M: '.$tropasM.' + '.$cuantas.'<br>';
+                
             }
              
         }
+    }
+    function distribuirTropasCustom($tropaSituadas){
+        foreach ($tropaSituadas as $key => $value) {
+            $this->vector[$value->pos]=new Territorio($value->pos, 'J',$value->cantidad);
+        }
+        
+        foreach($this->vector as $key => $value){
+            if(!$value instanceof Territorio){
+                $this->vector[$key]=new Territorio($key,'M',1);
+                //echo json_encode($value);
+            }
+        }
+ 
     }
 }

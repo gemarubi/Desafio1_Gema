@@ -21,13 +21,13 @@ class Conexion{
         $stmt->close();
         $conexion->close();
     }
-    public static function buscarPartida(){
+    public static function buscarUltimaPartida(){
         try{
             $conexion=self::conectar();
             try{
                 $datos=0;
         
-                $consulta = "SELECT ID_PARTIDA FROM PARTIDA WHERE ID_PARTIDA =  (SELECT MAX(ID_PARTIDA) FROM PARTIDA)";
+                $consulta = "SELECT * FROM PARTIDA WHERE ID_PARTIDA =  (SELECT MAX(ID_PARTIDA) FROM PARTIDA)";
                 $stmt = $conexion->prepare($consulta);
                 
                 $stmt->execute();
@@ -36,7 +36,7 @@ class Conexion{
                     while( $fila = $resultados->fetch_array())
                         {
                       
-                        $datos=$fila[0];
+                        $datos=new Partida($fila[2],$fila[1],$fila[0]);
                          
                         }
                         //echo json_encode($datos);
@@ -115,7 +115,7 @@ class Conexion{
         return -1;
         }  
     }
-    public static function guardarTablero($territorio, $id_Partida){
+    public static function guardarTablero($tablero, $id_Partida){
        //-1 error de conexion
         //0 error de consulta (clave duplicada o algo asi)
         //1 todo ha ido bien
@@ -123,14 +123,16 @@ class Conexion{
             $conexion=self::conectar();
             try{
                //var_dump($territorio);
-              
+              foreach ($tablero as $key => $value) {
                 $consulta = "INSERT INTO TERRITORIO VALUES (?,?,?,?,?)";
                 $stmt = $conexion->prepare($consulta);
-                if($territorio!=null){
-                $stmt->bind_param("iisii", $territorio->id,$territorio->posicion, $territorio->tropa, $territorio->cantidad, $id_Partida);
-                }
+                    if($value!=null){
+                    $stmt->bind_param("iisii", $value->id,$value->posicion, $value->tropa, $value->cantidad, $id_Partida);
+                    }
                 $stmt->execute();
                 $stmt->close();
+              }
+               
                 return 1;
               
                    
@@ -145,6 +147,41 @@ class Conexion{
         }catch(Exception $e){
         return -1;
         }  
+    }
+
+    public static function buscarTablero($idPartida){
+
+        try{
+            $conexion=self::conectar();
+            try{
+                $datos=0;
+        
+                $consulta = "SELECT * FROM TERRITORIO WHERE ID_PARTIDA = ?";
+                $stmt = $conexion->prepare($consulta);
+                $stmt->bind_param("i", $idPartida); 
+                $stmt->execute();
+                $resultados = $stmt->get_result();
+                $tablero=[];
+                    while( $fila = $resultados->fetch_array())
+                        {
+                      
+                        $datos=new Territorio($fila[1],$fila[2],$fila[3],$fila[4]);
+                          $tablero[]=$datos;
+                        }
+              
+                    $resultados -> free_result();
+                
+                self::desconectar($conexion,$stmt);
+                 return  $tablero;
+            }catch(Exception $e){
+  
+                    return 0;
+                }
+  
+        }catch(Exception $e){
+            return -1;
+        }
+
     }
   
 

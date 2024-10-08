@@ -7,7 +7,13 @@ $parametros = explode("/",$paths);
 $datosRecibidos = file_get_contents("php://input");
 $body=json_decode($datosRecibidos,false);
 unset($parametros[0]);
+;
 
-if($requestMethod=='GET' && strtoupper($parametros[1])=='GAMER' && empty($parametros[2])){
+if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($parametros[2])){
+    
     ControladorPartida::iniciarJuegoEstandar($body);
+
+}else if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && strtoupper($parametros[2])=='CUSTOM'){
+   // debe tener correo, longitud del tablero, cantidad de tropas y tantas posiciones como tropas restantes haya :(cantTropas-longitud)/2
+    ControladorPartida::iniciarJuegoPersonalizado($body);
 }
