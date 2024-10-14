@@ -21,6 +21,8 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
     ControladorAdmin::getAllUsers();
 }else if($requestMethod=='POST' && strtoupper($parametros[1])=='ADMIN' && empty($parametros[2])){
     ControladorAdmin::insertUser($body);
-}else if($requestMethod=='POST' && strtoupper($parametros[1])=='ADMIN' && strtoupper($parametros[2])=='UPDATEROL'){
+}else if($requestMethod=='PUT' && strtoupper($parametros[1])=='ADMIN' && empty($parametros[2])){
     ControladorAdmin::asignarRol($body);
+}else if($requestMethod=='DELETE' && strtoupper($parametros[1]) =='ADMIN' && empty($parametros[2])){
+    ControladorAdmin::deleteUser($body);
 }

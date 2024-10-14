@@ -105,12 +105,13 @@ class Conexion{
                 $stmt->bind_param("iii", $partida->idPartida,$partida->resultado,$partida->id_usuario);
                 $stmt->execute();
                 $stmt->close();
-                return $stmt;
+                
+                return 1;
             }catch(Exception $e){
 
                 return 0;
             }
-
+            self::desconectar($conexion,$stmt);
         }catch(Exception $e){
         return -1;
         }  
@@ -132,17 +133,15 @@ class Conexion{
                 $stmt->execute();
                 $stmt->close();
               }
-               
+              self::desconectar($conexion,$stmt);
                 return 1;
-              
-                   
-                    
-                
+               
                
             }catch(Exception $e){
 
                 return 0;
             }
+
 
         }catch(Exception $e){
         return -1;
@@ -278,7 +277,7 @@ class Conexion{
 
             return 0;
         }
-
+        self::desconectar($conexion,$stmt);
     }catch(Exception $e){
     return -1;
     }  
@@ -305,7 +304,7 @@ class Conexion{
 
             return $e;
         }
-
+        self::desconectar($conexion,$stmt);
     }catch(Exception $e){
     return -1;
     }  
@@ -328,9 +327,50 @@ class Conexion{
 
             return 0;
         }
-
+        self::desconectar($conexion,$stmt);
     }catch(Exception $e){
         return -1;
+    }
+  }
+
+  public static function borrar($id_user){
+    try {
+        $conexion=self::conectar();
+        try{
+            $consulta = "DELETE FROM USUARIO  WHERE ID_USUARIO= ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("i", $id_user);
+            $stmt->execute();
+            $stmt->close();
+            $conexion->close();
+            return 1;
+        }catch (Exception $e){
+            return 0;
+        }
+        self::desconectar($conexion,$stmt);
+    } catch (Exception $e) {
+        return $e;
+    }
+
+  }
+
+  public static function borrarRol($id_user){
+    try {
+        $conexion=self::conectar();
+        try{
+            $consulta = "DELETE FROM ROL_USUARIO  WHERE ID_USUARIO= ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("i", $id_user);
+            $stmt->execute();
+            $stmt->close();
+            $conexion->close();
+            return 1;
+        }catch (Exception $e){
+            return 0;
+        }
+        self::desconectar($conexion,$stmt);
+    } catch (Exception $e) {
+        return $e;
     }
   }
 
