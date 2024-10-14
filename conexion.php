@@ -201,7 +201,8 @@ class Conexion{
                 while( $fila = $resultados->fetch_array())
                     {
                   
-                    $datos=new Usuario($fila[0],$fila[1]);
+                    $datos=new Usuario($fila[1]);
+                    $datos->id_usuario=$fila[0];
                      
                     }
           
@@ -218,4 +219,120 @@ class Conexion{
         return -1;
     }
   }
+
+  public static function buscarTodosUsuarios(){
+
+    try{
+        $conexion=self::conectar();
+        try{
+            $datos=0;
+    
+            $consulta = "SELECT ID_USUARIO, CORREO FROM USUARIO ";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->execute();
+            $resultados = $stmt->get_result();
+            $listaUser=[];
+                while( $fila = $resultados->fetch_array())
+                    {
+                  
+                    $datos=new Usuario($fila[1]);
+                     $datos->id_usuario=$fila[0];
+                     $listaUser[]=$datos;
+                    }
+          
+                $resultados -> free_result();
+            
+            self::desconectar($conexion,$stmt);
+             return  $listaUser;
+        }catch(Exception $e){
+
+                return 0;
+            }
+
+    }catch(Exception $e){
+        return -1;
+    }
+  }
+
+  public static function registrarUsuarios($usuarios){
+
+    try{
+        $conexion=self::conectar();
+        try{
+           //var_dump($territorio);
+          foreach ($usuarios as $key => $value) {
+            $consulta = "INSERT INTO USUARIO VALUES (?,?,?)";
+            $stmt = $conexion->prepare($consulta);
+                if($value!=null){
+                    $pass=$value->getPass();
+                $stmt->bind_param("iss", $value->id_usuario,$value->email,$pass);
+                }
+            $stmt->execute();
+            $stmt->close();
+           
+          }
+           
+            return 1;
+           
+        }catch(Exception $e){
+
+            return 0;
+        }
+
+    }catch(Exception $e){
+    return -1;
+    }  
+  }
+
+  public static function asignarRol($id, $rol){
+    try{
+        $conexion=self::conectar();
+        try{
+           //var_dump($territorio);
+            $consulta = "INSERT INTO ROL_USUARIO VALUES (?,?)";
+            $stmt = $conexion->prepare($consulta);
+                
+            $stmt->bind_param("ii",$id,$rol);
+                
+            $stmt->execute();
+            $stmt->close();
+           
+          
+           
+            return 1;
+           
+        }catch(Exception $e){
+
+            return $e;
+        }
+
+    }catch(Exception $e){
+    return -1;
+    }  
+  }
+
+  public static function updateRol($id_user, $rol){
+    try{
+        $conexion=self::conectar();
+        try {
+            
+            $consulta = "UPDATE ROL_USUARIO SET ID_ROL= ? WHERE ID_USUARIO= ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("ii",$rol, $id_user);
+            $stmt->execute();
+            $stmt->close();
+            $conexion->close();
+           
+            return 1;
+        } catch(Exception $e){
+
+            return 0;
+        }
+
+    }catch(Exception $e){
+        return -1;
+    }
+  }
+
 }
+
