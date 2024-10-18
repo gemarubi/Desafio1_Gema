@@ -17,6 +17,7 @@ class Partida{
         $aleatorio=array_rand($this->vector,count($this->vector)/2); 
         foreach ($aleatorio as  $value) {
             $this->vector[$value]=new Territorio($value,'J',1);
+           
         }
 
         for ($i=1; $i < count($this->vector); $i++) { 
