@@ -18,7 +18,7 @@ class Conexion{
         
     }
     public static function desconectar($conexion, $stmt){
-        $stmt->close();
+        //$stmt->close();
         $conexion->close();
     }
     public static function buscarUltimaPartida(){
