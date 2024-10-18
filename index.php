@@ -25,4 +25,11 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
     ControladorAdmin::asignarRol($body);
 }else if($requestMethod=='DELETE' && strtoupper($parametros[1]) =='ADMIN' && empty($parametros[2])){
     ControladorAdmin::deleteUser($body);
+}else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER'&& empty($parametros[2])){
+    
+    ControladorUsuario::consultarDatosUser($body->correo);
+
+}else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER'&& strtoupper($parametros[2])== 'ESTADISTICA'){
+    
+    ControladorUsuario::verEstadisticas($body->correo);
 }
