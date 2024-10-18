@@ -35,6 +35,7 @@ class ControladorPartida{
                 $partida=new Partida($usuario->id_usuario,0 ,0 ,$body->longitud);
                 $partida->distribuirTropasCustom($body->tropaSituadas);
                 $partida->aniadirSobrantes('M',($body->canTropas-$body->longitud)/2);
+                echo json_encode($partida);
                 $partidaGuardada=self::guardarPartidaBBDD($partida);
                 
            echo json_encode($partidaGuardada);
