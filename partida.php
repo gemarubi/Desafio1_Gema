@@ -21,7 +21,42 @@ class Partida{
       
     }
 
- 
+    public function turnoMaquina(){
+
+                $tJugador=array_filter($this->vector,function($territorio){
+                    return $territorio->tropa=='J';
+                });
+                $tMaquina=array_filter($this->vector,function($territorio){
+                return $territorio->tropa=='M';
+                });
+                $tropTotales;
+                foreach ($tMaquina as $value) {
+                    $tropTotales+=$value->cantidad;
+                }
+                $tFuertes= array_filter($tMaquina, function($territorio){
+                    return $territorio->cantidad>2;
+                });
+        
+            $ataques=0;
+            if(!empty($tFuertes)){
+                foreach ($tFuertes as $value) {
+                    if($this->vector[$value->posicion-1]->tropa=='J' && $this->vector[$value->posicion-1]->cantidad==1 && count(tMaquina)>=count(tJugador)){
+                        $this->atacarMaquina($value, $this->vector[$value->posicion-1]);
+                        $ataques++;
+                    }else if($this->vector[$value->posicion+1]->tropa=='J' && $this->vector[$value->posicion+1]->cantidad==1 && count(tMaquina)>=count(tJugador)){
+                        $this->atacarMaquina($value, $this->vector[$value->posicion+1]);
+                         $ataques++;
+                    }
+                }
+            }
+                
+            if($ataques==0){
+                //moverMaquina()
+            }
+        
+        }
+        
+
     public function distribuirTropas(){
         $aleatorio=array_rand($this->vector,count($this->vector)/2); 
         foreach ($aleatorio as  $value) {

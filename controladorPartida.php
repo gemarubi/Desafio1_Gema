@@ -9,7 +9,15 @@ class ControladorPartida{
         return Conexion::buscarUsuario($correo);
     }
 
-   
+    public static function moverTropasMaquina($body){
+        $usuario=self::buscarUsuario($body->correo);
+            if($usuario){
+        $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
+        $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
+        
+    }
+}
+        
 
     public static function moverTropasJugador($body){
         $usuario=self::buscarUsuario($body->correo);
