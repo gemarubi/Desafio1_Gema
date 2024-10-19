@@ -55,6 +55,31 @@ class Conexion{
 
     }
 
+    public static function guardarMovimiento($territorio, $idPartida){
+        json_encode($territorio);
+        try{
+            $conexion=self::conectar();
+            try {
+                
+                $consulta = "UPDATE TERRITORIO SET CANTIDAD = ? WHERE ID_PARTIDA = ? AND POSICION=?";
+                $stmt = $conexion->prepare($consulta);
+                $stmt->bind_param("iii",$territorio->cantidad, $idPartida, $territorio->posicion);
+                $stmt->execute();
+                $stmt->close();
+                self::desconectar($conexion,$stmt);
+               
+                return 1;
+            } catch(Exception $e){
+  
+                return 0;
+            }
+
+        }catch(Exception $e){
+        return -1;
+        }
+    }
+
+    
     public static function buscarPartidaUser($id_usuario){
         //-1 error de conexion
       //0 error de consulta (clave duplicada o algo asi)
@@ -73,7 +98,7 @@ class Conexion{
                   while( $fila = $resultados->fetch_array())
                       {
                     
-                      $datos=new Partida($fila[0],$fila[1],$fila[2]);
+                      $datos=new Partida($fila[2],$fila[1],$fila[0]);
                         $partidas[]=$datos;
                       }
             

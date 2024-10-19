@@ -33,4 +33,7 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
 }else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER'&& strtoupper($parametros[2])== 'ESTADISTICA'){
     
     ControladorUsuario::verEstadisticas($body->correo);
+}else if($requestMethod=='PUT' && strtoupper($parametros[1])=='GAMER'){
+    
+    ControladorPartida::moverTropas($body);
 }

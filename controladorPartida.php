@@ -9,6 +9,48 @@ class ControladorPartida{
         return Conexion::buscarUsuario($correo);
     }
 
+    public static function moverTropas($body){
+        $usuario=self::buscarUsuario($body->correo);
+        if($usuario){
+            $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
+            $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
+           
+           
+
+            if($partida && ($body->destino==$body->origen+1 || $body->destino==$body->origen-1) 
+            && $partida->vector[$body->origen]->tropa=='J' && $partida->vector[$body->destino]->tropa == 'J'
+            && $body->canTropas < $partida->vector[$body->origen]->cantidad){
+              
+                $partida->movimiento($body);  
+              
+                Conexion::guardarMovimiento($partida->vector[$body->origen],$partida->idPartida);
+                Conexion::guardarMovimiento($partida->vector[$body->destino],$partida->idPartida);
+                echo json_encode($partida->vector);
+            }else{
+                echo json_encode(["mensaje"=>"ese movimiento no es posible"]);
+            }
+        }else{
+            echo json_encode(["mensaje"=>"usuario incorrecto"]);
+        }
+        
+
+    }
+
+    public static function seleccionarPartida($id, $partidasUser){
+        $partida;
+        foreach ($partidasUser as $key => $value) {
+           
+            if($value->idPartida==$id) {
+                $partida=$value;
+            }
+        }
+        $partida->vector=Conexion::buscarTablero($partida->idPartida);
+        return $partida;
+    }
+
+  
+    
+
     public static function iniciarJuegoEstandar($body){
         $usuario=self::buscarUsuario($body->correo);
         if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario!=null){
