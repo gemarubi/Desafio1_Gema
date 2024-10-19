@@ -19,24 +19,27 @@ class Partida{
             $this->vector[$value]=new Territorio($value,'J',1);
         }
 
-        for ($i=1; $i < count($this->vector); $i++) { 
+        for ($i=0; $i < count($this->vector); $i++) { 
             if($this->vector[$i] instanceof Territorio){
                 $this->vector[$i]->cantidad=1;
             }else{
                 $this->vector[$i]= new Territorio($i,'M',1);
             }
+
         }
+        
             
     }
 
-    function aniadirSobrantes($tropa,$canTropas=5){
+    function aniadirSobrantes($trop,$canTropas){
         
         $tropasJ=0;
         $cuantas=0;
+      
         while($tropasJ<$canTropas){
             
             $aleatorio=array_rand($this->vector,1);
-            if($this->vector[$aleatorio]->tropa==$tropa){
+            if($this->vector[$aleatorio]->tropa===$trop){
                
                 $cuantas=rand(1,$canTropas-$tropasJ);
                 $this->vector[$aleatorio]->cantidad+=$cuantas;

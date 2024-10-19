@@ -14,12 +14,10 @@ class ControladorPartida{
         if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario!=null){
             $partida=new Partida($usuario->id_usuario);
             $partida->distribuirTropas();
-            $partida->aniadirSobrantes('M');
-            $partida->aniadirSobrantes('J');
+            $partida->aniadirSobrantes('M',5);
+            $partida->aniadirSobrantes('J',5);
             $partidaGuardada=self::guardarPartidaBBDD($partida);
-            
-       echo json_encode($partidaGuardada);
-           //echo $resultado ;
+        
         }else{
             self::mostrarError();
         }
@@ -47,6 +45,7 @@ class ControladorPartida{
     public static function guardarPartidaBBDD($partida){
         Conexion::guardarPartida($partida);
         $partidaGuardada=Conexion::buscarUltimaPartida();
+        echo json_encode($partida->vector);
         Conexion::guardarTablero($partida->vector,$partidaGuardada->idPartida);
         $partidaGuardada->vector=Conexion::buscarTablero($partidaGuardada->idPartida);
         return $partidaGuardada;

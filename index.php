@@ -2,6 +2,7 @@
 require_once 'partida.php';
 require_once 'controladorPartida.php';
 require_once 'controladorAdmin.php';
+require_once 'controladorUsuario.php';
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $paths = $_SERVER['REQUEST_URI'];
 $parametros = explode("/",$paths);
