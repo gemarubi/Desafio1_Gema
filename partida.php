@@ -14,13 +14,14 @@ class Partida{
     }
 
     //preguntar si dejarlo aqui o ponerlo en el controladorPartida
-    public function movimiento($body){
+    public function movimientoJugador($body){
       
             $this->vector[$body->origen]->cantidad-=$body->canTropas;
             $this->vector[$body->destino]->cantidad+=$body->canTropas;
       
-   
     }
+
+ 
     public function distribuirTropas(){
         $aleatorio=array_rand($this->vector,count($this->vector)/2); 
         foreach ($aleatorio as  $value) {

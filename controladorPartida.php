@@ -4,30 +4,32 @@ require_once 'conexion.php';
 
 
 class ControladorPartida{
-    //preguntar si dejo esto o es una tonteria
+   
     public static function buscarUsuario($correo){
         return Conexion::buscarUsuario($correo);
     }
 
-    public static function moverTropas($body){
+   
+
+    public static function moverTropasJugador($body){
         $usuario=self::buscarUsuario($body->correo);
         if($usuario){
             $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
             $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
-           
-           
 
             if($partida && ($body->destino==$body->origen+1 || $body->destino==$body->origen-1) 
             && $partida->vector[$body->origen]->tropa=='J' && $partida->vector[$body->destino]->tropa == 'J'
             && $body->canTropas < $partida->vector[$body->origen]->cantidad){
               
-                $partida->movimiento($body);  
+                $partida->movimientoJugador($body);  
+                
               
                 Conexion::guardarMovimiento($partida->vector[$body->origen],$partida->idPartida);
                 Conexion::guardarMovimiento($partida->vector[$body->destino],$partida->idPartida);
-                echo json_encode($partida->vector);
+                echo json_encode($partida->vector[$body->origen]);
+                echo json_encode($partida->vector[$body->destino]);
             }else{
-                echo json_encode(["mensaje"=>"ese movimiento no es posible"]);
+                echo json_encode(["mensaje"=>"opcion incorrecta"]);
             }
         }else{
             echo json_encode(["mensaje"=>"usuario incorrecto"]);
@@ -44,6 +46,7 @@ class ControladorPartida{
                 $partida=$value;
             }
         }
+     
         $partida->vector=Conexion::buscarTablero($partida->idPartida);
         return $partida;
     }
