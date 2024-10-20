@@ -47,6 +47,7 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
     ControladorPartida::moverTropasJugador($body);
 
 }else if($requestMethod=='PUT' && strtoupper($parametros[1])=='GAMER' && strtoupper($parametros[2])=='ATTACK'){
+    
     ControladorPartida::atacarJugador($body);
 
 }else if($requestMethod=='PUT' && strtoupper($parametros[1])=='GAMER' && strtoupper($parametros[2])=='PASSTURN'){

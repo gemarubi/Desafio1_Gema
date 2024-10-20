@@ -40,7 +40,23 @@ class ControladorPartida{
         }
     }
     
-    
+    public static function atacarJugador($body){
+        $usuario=self::buscarUsuario($body->correo);
+        if($usuario){
+            $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
+            $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
+            if($partida && ($body->atacante==$body->defensor+1 || $body->atacante==$body->defensor-1)
+                && $partida->vector[$body->atacante]->tropa=='J' && $partida->vector[$body->defensor]->tropa == 'M'
+                && $partida->vector[$body->atacante]->cantidad>1 && $dados<=3 
+                && $dados<=$partida->vector[$body->atacante]->cantidad-1){
+                    $partida->ataqueJugador($partida->vector[$body->atacante],$partida->vector[$body->defensor],$dados);
+                }else{
+                    echo json_encode(["mensaje"=>"opcion incorrecta"]);
+                }
+        }else{
+            echo json_encode(["mensaje"=>"usuario incorrecto"]);
+        }
+    }
     public static function moverTropasJugador($body){
         $usuario=self::buscarUsuario($body->correo);
         if($usuario){

@@ -20,7 +20,17 @@ class Partida{
       
     }
 
-    
+    public function ataqueJugador($atacante, $defensor,$dadosJugador){
+        $dadosMaquina=1;
+        if($defensor->cantidad>1){
+            $dadosMaquina=2;
+        }
+
+        $atacante->ataca($defensor,$dadosJugador,$dadosmaquina);
+
+        Conexion::guardarMovimiento($this->vector[$atacante->posicion],$this->idPartida);
+        Conexion::guardarMovimiento($this->vector[$defensor->posicion],$this->idPartida);
+    }
     public function movimientoMaquina($origen, $destino, $cantidad){
         $this->vector[$origen->posicion]->cantidad-=$cantidad;
         $this->vector[$destino->posicion]->cantidad+=$cantidad;
