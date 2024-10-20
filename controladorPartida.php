@@ -9,16 +9,38 @@ class ControladorPartida{
         return Conexion::buscarUsuario($correo);
     }
 
-    public static function moverTropasMaquina($body){
+    public static function jugadaMaquina($body){
+       
         $usuario=self::buscarUsuario($body->correo);
+     
             if($usuario){
         $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
+        
         $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
         
+        $respuesta=$partida->turnoMaquina();
+        $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
+        $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
+            if($respuesta==1){
+                echo json_encode([
+                            "partida"=>$partida->idPartida,
+                            "movimiento"=>"atacar",
+                             "tablero"=>$partida->vector]);
+            }else if($respuesta==2){
+                echo json_encode([
+                            "partida"=>$partida->idPartida,
+                            "movimiento"=>"mover tropas",
+                             "tablero"=>$partida->vector]);
+            }else{
+                echo json_encode([
+                            "partida"=>$partida->idPartida,
+                            "movimiento"=>"pasar el turno",
+                             "tablero"=>$partida->vector]);
+            }
+        }
     }
-}
-        
-
+    
+    
     public static function moverTropasJugador($body){
         $usuario=self::buscarUsuario($body->correo);
         if($usuario){
@@ -30,8 +52,6 @@ class ControladorPartida{
             && $body->canTropas < $partida->vector[$body->origen]->cantidad){
               
                 $partida->movimientoJugador($body);  
-                
-              
                 Conexion::guardarMovimiento($partida->vector[$body->origen],$partida->idPartida);
                 Conexion::guardarMovimiento($partida->vector[$body->destino],$partida->idPartida);
                 echo json_encode($partida->vector[$body->origen]);

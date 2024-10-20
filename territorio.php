@@ -13,5 +13,22 @@ class Territorio{
         $this->cantidad = $cantidad;
     }
 
+    function atacar( &$defensor,$dadosAtacante,$dadosDefensor){
+       
+       
+        while(count($dadosDefensor)>0){
+            if(end($dadosAtacante)>end($dadosDefensor)){
+                $defensor->cantidad--;
+               
+            }else{
+                $this->cantidad--;
+            }
+            array_pop($dadosAtacante);
+            array_pop($dadosDefensor);
+        }
+          
+    }
+
+   
    
 }
