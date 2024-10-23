@@ -15,14 +15,14 @@ class ControladorAdmin{
             $vectorU[]=$user;
         }
       
-        Conexion::registrarUsuarios($vectorU);
-          //Preguntar xq  no me funciona con $this
+        $respuesta= Conexion::registrarUsuarios($vectorU);
+          
         self::asignarRolUser($vectorU);
         
     }
 
     public  static function asignarRolUser($vectorU){
-        $id_user;
+       
         foreach ($vectorU as $value) {
             $user=Conexion::buscarUsuario($value->email);
             

@@ -6,14 +6,16 @@ require_once 'conexion.php';
 class ControladorPartida{
    
     public static function buscarUsuario($correo){
-        return Conexion::buscarUsuario($correo);
+        
+        
+        return Conexion::buscarUsuario($correo); 
     }
 
     public static function jugadaMaquina($body){
        
         $usuario=self::buscarUsuario($body->correo);
      
-            if($usuario){
+            if($usuario instanceof Usuario){
         $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
         
         $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
@@ -37,21 +39,31 @@ class ControladorPartida{
                             "movimiento"=>"pasar el turno",
                              "tablero"=>$partida->vector]);
             }
+        }else{
+            self::mostrarError();
         }
     }
     
     public static function atacarJugador($body){
         $usuario=self::buscarUsuario($body->correo);
-        if($usuario){
+        if($usuario instanceof Usuario){
             $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
             $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
             if($partida && ($body->atacante==$body->defensor+1 || $body->atacante==$body->defensor-1)
                 && $partida->vector[$body->atacante]->tropa=='J' && $partida->vector[$body->defensor]->tropa == 'M'
-                && $partida->vector[$body->atacante]->cantidad>1 && $dados<=3 
-                && $dados<=$partida->vector[$body->atacante]->cantidad-1){
-                    $partida->ataqueJugador($partida->vector[$body->atacante],$partida->vector[$body->defensor],$dados);
+                && $partida->vector[$body->atacante]->cantidad>1 && $body->dados<=3 
+                && $body->dados<=$partida->vector[$body->atacante]->cantidad-1){
+                    $dados=$partida->ataqueJugador($partida->vector[$body->atacante],$partida->vector[$body->defensor],$body->dados);
+                    Conexion::guardarMovimiento($partida->vector[$body->atacante],$body->idPartida);
+                    Conexion::guardarMovimiento($partida->vector[$body->defensor],$body->idPartida);
+                    
+                    
+                    echo json_encode(["partida"=>$partida->idPartida,
+                                    "dados"=>$dados,
+                                    "atacante"=>$partida->vector[$body->atacante],
+                                    "defensor"=>$partida->vector[$body->defensor]]);
                 }else{
-                    echo json_encode(["mensaje"=>"opcion incorrecta"]);
+                    self::mostrarError();
                 }
         }else{
             echo json_encode(["mensaje"=>"usuario incorrecto"]);
@@ -59,7 +71,7 @@ class ControladorPartida{
     }
     public static function moverTropasJugador($body){
         $usuario=self::buscarUsuario($body->correo);
-        if($usuario){
+        if($usuario instanceof Usuario){
             $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
             $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
 
@@ -73,7 +85,7 @@ class ControladorPartida{
                 echo json_encode($partida->vector[$body->origen]);
                 echo json_encode($partida->vector[$body->destino]);
             }else{
-                echo json_encode(["mensaje"=>"opcion incorrecta"]);
+                self::mostrarError();
             }
         }else{
             echo json_encode(["mensaje"=>"usuario incorrecto"]);
@@ -115,7 +127,7 @@ class ControladorPartida{
     public static function iniciarJuegoPersonalizado($body){
         
         $usuario=self::buscarUsuario($body->correo);
-       if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario!=null 
+       if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario instanceof Usuario 
             && $body->longitud%2==0 && $body->canTropas>$body->longitud 
             && $body->canTropas%2==0 && count($body->tropaSituadas)>=$body->longitud/2){
                 

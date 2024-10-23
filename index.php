@@ -54,4 +54,13 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
     
     ControladorPartida::jugadaMaquina($body);
 
+}else{
+    
+    header("HTTP/1.1 404 Servicio incorrecto");
+    $respuesta=[
+        'cod'=> 404,
+        'data' => 'Incorrecto'
+    ];
+
+    echo json_encode($respuesta);
 }

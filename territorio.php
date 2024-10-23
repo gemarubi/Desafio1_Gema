@@ -14,7 +14,7 @@ class Territorio{
     }
 
     function atacar( &$defensor,$dadosAtacante,$dadosDefensor){
-       
+       $resultado=0;
        
         while(count($dadosDefensor)>0){
             if(end($dadosAtacante)>end($dadosDefensor)){
@@ -26,6 +26,7 @@ class Territorio{
             array_pop($dadosAtacante);
             array_pop($dadosDefensor);
         }
+       return count($dadosAtacante);
           
     }
 

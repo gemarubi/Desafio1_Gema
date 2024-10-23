@@ -25,11 +25,15 @@ class Partida{
         if($defensor->cantidad>1){
             $dadosMaquina=2;
         }
-
-        $atacante->ataca($defensor,$dadosJugador,$dadosmaquina);
-
-        Conexion::guardarMovimiento($this->vector[$atacante->posicion],$this->idPartida);
-        Conexion::guardarMovimiento($this->vector[$defensor->posicion],$this->idPartida);
+        $dadosJugador=$this->generarDados($dadosJugador);
+        $dadosMaquina=$this->generarDados($dadosMaquina);
+        $tropasAMover=$atacante->atacar($defensor,$dadosJugador, $dadosMaquina);
+        if($tropasAMover>0){
+           $this->vector[$defensor->posicion]->tropa='J';
+           $this->vector[$defensor->posicion]->cantidad=$tropasAMover;
+        }
+        return $dados=["dadosJugador"=>$dadosJugador,
+                        "dadosMaquina"=>$dadosMaquina];
     }
     public function movimientoMaquina($origen, $destino, $cantidad){
         $this->vector[$origen->posicion]->cantidad-=$cantidad;
@@ -45,7 +49,6 @@ class Partida{
         //1 ataque
         //2 movimiento
         //3 pasar turno
-        
                 $tJugador=array_filter($this->vector,function($territorio){
                     return $territorio->tropa=='J';
                 });
@@ -68,19 +71,15 @@ class Partida{
             if(!empty($tFuertes) && $tropTotalesMa>=$tropTotalesJu){
                 foreach ($tFuertes as $value) {
                     if($value->posicion>0 && $this->vector[$value->posicion-1]->tropa=='J' 
-                    && $this->vector[$value->posicion-1]->cantidad<$value->cantidad 
-                    && $value->cantidad>0 &&  $this->vector[$value->posicion-1]->cantidad>0){
+                    && $this->vector[$value->posicion-1]->cantidad<$value->cantidad ){
                        
                         $dados=$this->cuantosDados($value,$this->vector[$value->posicion-1]);
-                       
                         $value->atacar($this->vector[$value->posicion-1],$dados['atacante'],$dados['defensor']);
                         Conexion::guardarMovimiento($this->vector[$value->posicion-1],$this->idPartida);
                         Conexion::guardarMovimiento($value,$this->idPartida);
                     }else if($value->posicion<count($this->vector) && $this->vector[$value->posicion+1]->tropa=='J' 
-                    && $this->vector[$value->posicion+1]->cantidad<$value->cantidad 
-                    && $value->cantidad>0 &&  $this->vector[$value->posicion-1]->cantidad>0){
+                    && $this->vector[$value->posicion+1]->cantidad<$value->cantidad ){
                         $dados=$this->cuantosDados($value,$this->vector[$value->posicion+1]);
-                        
                         $value->atacar($this->vector[$value->posicion+1],$dados['atacante'],$dados['defensor']);
                         Conexion::guardarMovimiento($this->vector[$value->posicion+1],$this->idPartida);
                         Conexion::guardarMovimiento($value,$this->idPartida);
