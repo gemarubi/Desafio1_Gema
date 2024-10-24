@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "c2a291e3-a091-4011-8be6-44835099a2cc",
+		"name": "Risk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20211420"
+	},
+	"item": [
+		{
+			"name": "Ver Estadisticas",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"cynthia@php.com\",\r\n  \"pass\" : \"1234\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/user/estadistica",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"user",
+						"estadistica"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cambiarPass",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"gemarubio89@gmail.com\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/user/newpass",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"user",
+						"newpass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Rol",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\": \"luka@php.com\",\r\n    \"pass\": 1234,\r\n    \"usUpdated\": \"cynthia@php.com\",\r\n    \"rol\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/admin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar Usuario",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\": \"luka@php.com \",\r\n  \"pass\":1234,\r\n  \"usBorrado\": \"gemarubio@correo.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/admin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver todos los usuarios",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\": \"luka@php.com \",\r\n  \"pass\":1234\r\n  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/admin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Usuarios",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n  \"correo\": \"luka@php.com \",\r\n  \"pass\": 1234,\r\n  \"registro\":[{\"email\" : \"gema7@php.com \",\r\n               \"pass\" : 1234},\r\n               {\"email\":\"pepe6@php.com\",\r\n               \"pass\": 1234}] \r\n}\r\n \r\n\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/admin",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Partida Random",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"pepe2@php.com \",\r\n  \"pass\": \"1234\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/gamer",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"gamer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Partida Personalizada",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"correo\" : \"pepe@php.com \", \r\n \"pass\": \"1234\",\r\n \"longitud\": 10,\r\n \"canTropas\":20,\r\n \"tropaSituadas\":[{\r\n \"pos\": 1,\r\n \"cantidad\":2},\r\n {\"pos\": 3,\r\n \"cantidad\":2},\r\n {\"pos\": 5,\r\n \"cantidad\":2},\r\n {\"pos\": 7,\r\n \"cantidad\":2},\r\n {\"pos\": 9,\r\n \"cantidad\":2}\r\n ]\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/gamer/custom",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"gamer",
+						"custom"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver datos Usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"cynthia@php.com\",\r\n  \"pass\" : \"1234\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/user",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mover Tropas",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"luka@php.com\",\r\n  \"pass\": \"1234\",\r\n  \"idPartida\":120,\r\n  \"origen\" : 2,\r\n  \"destino\":3,\r\n  \"canTropas\" : 1\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/gamer",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"gamer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PasarTurno",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"luka@php.com\",\r\n  \"pass\" : \"1234\",\r\n  \"idPartida\":120\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/gamer/passturn/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"gamer",
+						"passturn",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "atacar",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"correo\" : \"cynthia@php.com\",\r\n  \"idPartida\": 116,\r\n   \"pass\": \"1234\",\r\n  \"atacante\" : 14,\r\n  \"defensor\":13,\r\n  \"dados\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8090/gamer/attack/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"gamer",
+						"attack",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
