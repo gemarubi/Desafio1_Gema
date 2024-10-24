@@ -1,25 +1,26 @@
 <?php
-require_once 'partida.php';
-require_once 'conexion.php';
-
+require_once './models/partida.php';
+require_once './accesoBBDD/conexion.php';
+require_once 'controladorUsuario.php';
+require_once './models/usuario.php';
 
 class ControladorPartida{
    
-    public static function buscarUsuario($correo){
-        
-        
-        return Conexion::buscarUsuario($correo); 
-    }
+  
+    
 
     public static function jugadaMaquina($body){
        
-        $usuario=self::buscarUsuario($body->correo);
+        $usuario=ControladorUsuario::buscarUsuario($body->correo,$body->pass);
      
             if($usuario instanceof Usuario){
         $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
         
         $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
-        
+        $posIncrementadas=$partida->reclutamiento();
+        self::repartir($posIncrementadas["tropasM"],$partida);
+        self::repartir($posIncrementadas["tropasJ"],$partida);
+    
         $respuesta=$partida->turnoMaquina();
         $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
         $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
@@ -42,10 +43,19 @@ class ControladorPartida{
         }else{
             self::mostrarError();
         }
+
+        $posIncrementadas=$partida->reclutamiento();
+        self::repartir($posIncrementadas["tropasM"],$partida);
+        self::repartir($posIncrementadas["tropasJ"],$partida);
     }
-    
+
+   public static function repartir($posiciones, $partida){
+    foreach ($posiciones as $value) {
+        Conexion::guardarMovimiento($partida->vector[$value->posicion],$partida->idPartida);
+    }
+} 
     public static function atacarJugador($body){
-        $usuario=self::buscarUsuario($body->correo);
+        $usuario=ControladorUsuario::buscarUsuario($body->correo, $body->pass);
         if($usuario instanceof Usuario){
             $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
             $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
@@ -70,7 +80,7 @@ class ControladorPartida{
         }
     }
     public static function moverTropasJugador($body){
-        $usuario=self::buscarUsuario($body->correo);
+        $usuario=ControladorUsuario::buscarUsuario($body->correo, $body->pass);
         if($usuario instanceof Usuario){
             $partidasUser=Conexion::buscarPartidaUser($usuario->id_usuario);
             $partida=self::seleccionarPartida($body->idPartida,$partidasUser);
@@ -95,7 +105,7 @@ class ControladorPartida{
     }
 
     public static function seleccionarPartida($id, $partidasUser){
-        $partida;
+        $partida=0;
         foreach ($partidasUser as $key => $value) {
            
             if($value->idPartida==$id) {
@@ -111,14 +121,15 @@ class ControladorPartida{
     
 
     public static function iniciarJuegoEstandar($body){
-        $usuario=self::buscarUsuario($body->correo);
-        if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario!=null){
+        $usuario=ControladorUsuario::buscarUsuario($body->correo, $body->pass);
+        echo json_encode($usuario);
+        if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario instanceof Usuario){
             $partida=new Partida($usuario->id_usuario);
             $partida->distribuirTropas();
             $partida->aniadirSobrantes('M',5);
             $partida->aniadirSobrantes('J',5);
             $partidaGuardada=self::guardarPartidaBBDD($partida);
-        
+            echo json_encode($partidaGuardada);
         }else{
             self::mostrarError();
         }
@@ -126,7 +137,7 @@ class ControladorPartida{
     }
     public static function iniciarJuegoPersonalizado($body){
         
-        $usuario=self::buscarUsuario($body->correo);
+        $usuario=ControladorUsuario::buscarUsuario($body->correo, $body->pass);
        if(count(Conexion::buscarPartidaUser($usuario->id_usuario))<2 && $usuario instanceof Usuario 
             && $body->longitud%2==0 && $body->canTropas>$body->longitud 
             && $body->canTropas%2==0 && count($body->tropaSituadas)>=$body->longitud/2){
@@ -146,7 +157,6 @@ class ControladorPartida{
     public static function guardarPartidaBBDD($partida){
         Conexion::guardarPartida($partida);
         $partidaGuardada=Conexion::buscarUltimaPartida();
-        echo json_encode($partida->vector);
         Conexion::guardarTablero($partida->vector,$partidaGuardada->idPartida);
         $partidaGuardada->vector=Conexion::buscarTablero($partidaGuardada->idPartida);
         return $partidaGuardada;

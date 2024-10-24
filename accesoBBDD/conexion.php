@@ -1,7 +1,7 @@
 <?php 
 require_once 'parametros.php';
-require_once 'partida.php';
-require_once 'usuario.php';
+require_once './models/partida.php';
+require_once './models/usuario.php';
 
 class Conexion{
 
@@ -17,7 +17,7 @@ class Conexion{
         }
         
     }
-    public static function desconectar($conexion, $stmt){
+    public static function desconectar($conexion){
         //$stmt->close();
         $conexion->close();
     }
@@ -42,7 +42,7 @@ class Conexion{
                         //echo json_encode($datos);
                     $resultados -> free_result();
                 
-                self::desconectar($conexion,$stmt);
+               
                  return  $datos;
             }catch(Exception $e){
   
@@ -51,6 +51,8 @@ class Conexion{
   
         }catch(Exception $e){
             return -1;
+        }finally{
+            self::desconectar($conexion);
         }
 
     }
@@ -66,7 +68,7 @@ class Conexion{
                 $stmt->bind_param("iii",$territorio->cantidad, $idPartida, $territorio->posicion);
                 $stmt->execute();
                 $stmt->close();
-                self::desconectar($conexion,$stmt);
+             
                
                 return 1;
             } catch(Exception $e){
@@ -76,6 +78,9 @@ class Conexion{
 
         }catch(Exception $e){
         return -1;
+        }
+        finally{
+            self::desconectar($conexion);
         }
     }
 
@@ -104,7 +109,7 @@ class Conexion{
             
                   $resultados -> free_result();
               
-              self::desconectar($conexion,$stmt);
+           
                return  $partidas;
           }catch(Exception $e){
 
@@ -113,8 +118,10 @@ class Conexion{
 
       }catch(Exception $e){
           return -1;
-      }
-    
+      }finally{
+        self::desconectar($conexion);
+    }
+      
   }
 
  
@@ -136,10 +143,12 @@ class Conexion{
 
                 return 0;
             }
-            self::desconectar($conexion,$stmt);
+            
         }catch(Exception $e){
         return -1;
-        }  
+        }finally{
+            self::desconectar($conexion);
+        } 
     }
     public static function guardarTablero($tablero, $id_Partida){
        //-1 error de conexion
@@ -158,7 +167,7 @@ class Conexion{
                 $stmt->execute();
                 $stmt->close();
               }
-              self::desconectar($conexion,$stmt);
+              
                 return 1;
                
                
@@ -170,7 +179,9 @@ class Conexion{
 
         }catch(Exception $e){
         return -1;
-        }  
+        }finally{
+            self::desconectar($conexion);
+        }
     }
 
     public static function buscarTablero($idPartida){
@@ -195,7 +206,7 @@ class Conexion{
               
                     $resultados -> free_result();
                 
-                self::desconectar($conexion,$stmt);
+                
                  return  $tablero;
             }catch(Exception $e){
   
@@ -204,6 +215,8 @@ class Conexion{
   
         }catch(Exception $e){
             return -1;
+        }finally{
+            self::desconectar($conexion);
         }
 
     }
@@ -232,7 +245,7 @@ class Conexion{
           
                 $resultados -> free_result();
             
-            self::desconectar($conexion,$stmt);
+        
              return  $datos;
         }catch(Exception $e){
 
@@ -241,6 +254,83 @@ class Conexion{
 
     }catch(Exception $e){
         return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
+  }
+
+  public static function comprobarPass($id){
+    try{
+        $conexion=self::conectar();
+        try{
+            $datos=0;
+    
+            $consulta = "SELECT PASS FROM USUARIO WHERE ID_USUARIO = ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("s", $id); 
+            $stmt->execute();
+            $resultados = $stmt->get_result();
+         
+                while( $fila = $resultados->fetch_array())
+                    {
+                  
+                 
+                    $datos=$fila[0];
+                     
+                    }
+          
+                $resultados -> free_result();
+            
+        
+             return  $datos;
+        }catch(Exception $e){
+
+                return 0;
+            }
+
+    }catch(Exception $e){
+        return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
+  }
+
+  public static function buscarRol($id){
+    try{
+        $conexion=self::conectar();
+        try{
+            $datos=[];
+    
+            $consulta = "SELECT ROL.DESCRIPCION FROM ROL 
+                        JOIN ROL_USUARIO ON ROL.ID_ROL= ROL_USUARIO.ID_ROL 
+                        JOIN USUARIO ON ROL_USUARIO.ID_USUARIO=USUARIO.ID_USUARIO
+                        WHERE USUARIO.ID_USUARIO = ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("i", $id); 
+            $stmt->execute();
+            $resultados = $stmt->get_result();
+           
+                while( $fila = $resultados->fetch_array())
+                    {
+                  
+                        
+                    $datos[]=$fila[0];
+                     
+                    }
+          
+                $resultados -> free_result();
+            
+        
+             return  $datos;
+        }catch(Exception $e){
+
+                return 0;
+            }
+
+    }catch(Exception $e){
+        return -1;
+    }finally{
+        self::desconectar($conexion);
     }
   }
 
@@ -266,7 +356,6 @@ class Conexion{
           
                 $resultados -> free_result();
             
-            self::desconectar($conexion,$stmt);
              return  $listaUser;
         }catch(Exception $e){
 
@@ -275,6 +364,8 @@ class Conexion{
 
     }catch(Exception $e){
         return -1;
+    }finally{
+        self::desconectar($conexion);
     }
   }
 
@@ -283,7 +374,7 @@ class Conexion{
     try{
         $conexion=self::conectar();
         try{
-           //var_dump($territorio);
+           
           foreach ($usuarios as $key => $value) {
             $consulta = "INSERT INTO USUARIO VALUES (?,?,?)";
             $stmt = $conexion->prepare($consulta);
@@ -299,20 +390,48 @@ class Conexion{
             return 1;
            
         }catch(Exception $e){
+            
+            return 0;
+        }
+        
+    }catch(Exception $e){
+    return -1;
+    } finally{
+        self::desconectar($conexion);
+    } 
+  }
+
+  public static function cambiarPass($id,$pass){
+    try{
+        $conexion=self::conectar();
+        try {
+            
+            $consulta = "UPDATE USUARIO SET PASS= ? WHERE ID_USUARIO= ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("is",$id, $pass);
+            $stmt->execute();
+            $stmt->close();
+            
+           
+            return 1;
+        } catch(Exception $e){
 
             return 0;
         }
-        self::desconectar($conexion,$stmt);
+      
     }catch(Exception $e){
-    return -1;
-    }  
+        return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
   }
 
   public static function asignarRol($id, $rol){
     try{
+       
         $conexion=self::conectar();
         try{
-           //var_dump($territorio);
+           
             $consulta = "INSERT INTO ROL_USUARIO VALUES (?,?)";
             $stmt = $conexion->prepare($consulta);
                 
@@ -327,12 +446,14 @@ class Conexion{
            
         }catch(Exception $e){
 
-            return $e;
+            return 0;
         }
-        self::desconectar($conexion,$stmt);
+       
     }catch(Exception $e){
-    return -1;
-    }  
+        return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
   }
 
   public static function updateRol($id_user, $rol){
@@ -345,16 +466,18 @@ class Conexion{
             $stmt->bind_param("ii",$rol, $id_user);
             $stmt->execute();
             $stmt->close();
-            $conexion->close();
+            
            
             return 1;
         } catch(Exception $e){
 
             return 0;
         }
-        self::desconectar($conexion,$stmt);
+      
     }catch(Exception $e){
         return -1;
+    }finally{
+        self::desconectar($conexion);
     }
   }
 
@@ -362,21 +485,65 @@ class Conexion{
     try {
         $conexion=self::conectar();
         try{
-            $consulta = "DELETE FROM USUARIO  WHERE ID_USUARIO= ?";
+            $consulta = "DELETE FROM USUARIO  WHERE ID_USUARIO = ?";
             $stmt = $conexion->prepare($consulta);
             $stmt->bind_param("i", $id_user);
             $stmt->execute();
             $stmt->close();
-            $conexion->close();
+           
             return 1;
         }catch (Exception $e){
             return 0;
         }
-        self::desconectar($conexion,$stmt);
+      
     } catch (Exception $e) {
-        return $e;
+        return -1;
+    }finally{
+        self::desconectar($conexion);
     }
 
+  }
+  public static function borrarPartidas($id_user){
+    try {
+        $conexion=self::conectar();
+        try{
+            $consulta = "DELETE FROM PARTIDA  WHERE ID_USUARIO = ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("i", $id_user);
+            $stmt->execute();
+            $stmt->close();
+           
+            return 1;
+        }catch (Exception $e){
+            return 0;
+        }
+      
+    } catch (Exception $e) {
+        return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
+  }
+  public static function borrarTerritorios($id_partida){
+    try {
+        $conexion=self::conectar();
+        try{
+            $consulta = "DELETE FROM TERRITORIO  WHERE ID_PARTIDA = ?";
+            $stmt = $conexion->prepare($consulta);
+            $stmt->bind_param("i", $id_partida);
+            $stmt->execute();
+            $stmt->close();
+           
+            return 1;
+        }catch (Exception $e){
+            return 0;
+        }
+      
+    } catch (Exception $e) {
+        return -1;
+    }finally{
+        self::desconectar($conexion);
+    }
   }
 
   public static function borrarRol($id_user){
@@ -388,14 +555,16 @@ class Conexion{
             $stmt->bind_param("i", $id_user);
             $stmt->execute();
             $stmt->close();
-            $conexion->close();
+           
             return 1;
         }catch (Exception $e){
             return 0;
         }
-        self::desconectar($conexion,$stmt);
+      
     } catch (Exception $e) {
-        return $e;
+        return -1;
+    }finally{
+        self::desconectar($conexion);
     }
   }
 

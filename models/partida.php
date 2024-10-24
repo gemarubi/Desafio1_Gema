@@ -42,10 +42,44 @@ class Partida{
         Conexion::guardarMovimiento( $this->vector[$destino->posicion],$this->idPartida);
          
     }
+    public function reclutamiento(){
+    
+        $tropasM=array_filter($this->vector,function($territorio){
+            return $territorio->tropa=='M';
+            });
+            foreach ($tropasM as $key => $value) {
+                # code...
+                json_encode($value);
+            }
+           
+        $tropasJ=array_filter($this->vector,function($territorio){
+            return $territorio->tropa=='J';
+            });
+          // $this->reparto($tropasM);
+           //$this->reparto($tropasJ);
+           return ["tropasM"=>$tropasM, "tropasJ"=>$tropasJ];
+       }
+       
+   
+    public function reparto($tropasM){
+        $ejercitosM=floor(count($tropasM)/3);
+        if($ejercitosM<3) $ejercitosM=3;
+        $territorios=array_rand($tropasM,rand(1,$ejercitosM));
+       
+        foreach ($territorios as $value) {
+            if($ejercitosM>0){
+                
+                $tropasAniadidas=rand(1,$ejercitosM);
+                $value->cantidad+=$tropasAniadidas;
+                $ejercitosM-=$tropasAniadidas;
+            }
+            
+        }
+    }
 
     public function turnoMaquina(){
 
-        $respuesta;
+        $respuesta=0;
         //1 ataque
         //2 movimiento
         //3 pasar turno
@@ -122,8 +156,8 @@ class Partida{
     }
 
     public function cuantosDados($atacante, $defensor){
-        $dadosAtacante;
-        $dadosDefensor;
+        $dadosAtacante=0;
+        $dadosDefensor=0;
        
         if($atacante->cantidad>3){
             

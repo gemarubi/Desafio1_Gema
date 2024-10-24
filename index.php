@@ -1,8 +1,9 @@
 <?php
-require_once 'partida.php';
-require_once 'controladorPartida.php';
-require_once 'controladorAdmin.php';
-require_once 'controladorUsuario.php';
+require_once 'models/partida.php';
+require_once 'controllers/controladorPartida.php';
+require_once 'controllers/controladorAdmin.php';
+require_once 'controllers/controladorUsuario.php';
+
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 $paths = $_SERVER['REQUEST_URI'];
 $parametros = explode("/",$paths);
@@ -21,7 +22,7 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
 
 }else if($requestMethod=='GET'  && strtoupper($parametros[1])=='ADMIN'&& empty($parametros[2])){
     
-    ControladorAdmin::getAllUsers();
+    ControladorAdmin::getAllUsers($body);
 
 }else if($requestMethod=='POST' && strtoupper($parametros[1])=='ADMIN' && empty($parametros[2])){
     
@@ -29,18 +30,18 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
 
 }else if($requestMethod=='PUT' && strtoupper($parametros[1])=='ADMIN' && empty($parametros[2])){
     
-    ControladorAdmin::asignarRol($body);
+    ControladorAdmin::updateRol($body);
 
 }else if($requestMethod=='DELETE' && strtoupper($parametros[1]) =='ADMIN' && empty($parametros[2])){
     
     ControladorAdmin::deleteUser($body);
 }else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER'&& empty($parametros[2])){
     
-    ControladorUsuario::consultarDatosUser($body->correo);
+    ControladorUsuario::consultarDatosUser($body->correo, $body->pass);
 
 }else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER'&& strtoupper($parametros[2])== 'ESTADISTICA'){
     
-    ControladorUsuario::verEstadisticas($body->correo);
+    ControladorUsuario::verEstadisticas($body->correo,$body->pass);
 
 }else if($requestMethod=='PUT' && strtoupper($parametros[1])=='GAMER'&& empty($parametros[2])){
     
@@ -53,6 +54,10 @@ if($requestMethod=='POST' && strtoupper($parametros[1])=='GAMER' && empty($param
 }else if($requestMethod=='PUT' && strtoupper($parametros[1])=='GAMER' && strtoupper($parametros[2])=='PASSTURN'){
     
     ControladorPartida::jugadaMaquina($body);
+
+}else if($requestMethod=='POST' && strtoupper($parametros[1])=='USER' && strtoupper($parametros[2])=='NEWPASS'){
+    
+    ControladorUsuario::restablecerPass($body);
 
 }else{
     
