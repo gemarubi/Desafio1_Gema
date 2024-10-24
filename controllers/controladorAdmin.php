@@ -13,6 +13,8 @@ class ControladorAdmin{
             }else{
                 ControladorPartida::mostrarError();
             }
+        }else{
+            ControladorPartida::mostrarError();
         }
        
        
@@ -68,9 +70,9 @@ class ControladorAdmin{
         
         $user=Conexion::buscarUsuario($body->usUpdated);
         
-        if($usuario instanceof Usuario && self::comprobarRol($usuario->id_usuario)){
+        if($usuario instanceof Usuario && self::comprobarRol($usuario->id_usuario)&&$user instanceof Usuario){
             $res=Conexion::updateRol($user->id_usuario,$body->rol);
-            if($user instanceof Usuario && $res==1){
+            if($res==1){
                 $user=Conexion::buscarUsuario($body->usUpdated);
                 $user->rol=Conexion::buscarRol($user->id_usuario);
                     echo json_encode(['mensaje'=>'Rol actualizado',
@@ -78,12 +80,12 @@ class ControladorAdmin{
               
                    
             }else{
-                    //ControladorPartida::mostrarError();
-                    echo 'falla la consulta';
+                    ControladorPartida::mostrarError();
+                 
                 }
         }else{
-           // ControladorPartida::mostrarError();
-           echo 'falla el usuario  luka';
+           ControladorPartida::mostrarError();
+          
         }
         
         
@@ -95,7 +97,7 @@ class ControladorAdmin{
         
         $usuario=ControladorUsuario::buscarUsuario($body->correo,$body->pass);
         $user=Conexion::buscarUsuario($body->usBorrado);
-        if($usuario instanceof Usuario && self::comprobarRol($usuario->id_usuario)){
+        if($usuario instanceof Usuario && self::comprobarRol($usuario->id_usuario)&& $user instanceof Usuario){
            $partidas=Conexion::buscarPartidaUser($user->id_usuario);
            if($partidas){
                 foreach ($partidas as  $value) {

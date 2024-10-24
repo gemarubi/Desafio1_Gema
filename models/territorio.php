@@ -16,7 +16,7 @@ class Territorio{
     function atacar( &$defensor,$dadosAtacante,$dadosDefensor){
        $resultado=0;
        
-        while(count($dadosDefensor)>0){
+        while(count($dadosDefensor)>0 && $defensor->cantidad>0 && $this->cantidad>1){
             if(end($dadosAtacante)>end($dadosDefensor)){
                 $defensor->cantidad--;
                

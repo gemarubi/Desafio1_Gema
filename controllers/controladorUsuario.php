@@ -54,22 +54,25 @@ class ControladorUsuario{
                 $mail->AltBody = 'Tu nueva contraseña es:'.$newPass;
             
                 $mail->send();    //Enviar correo eletrónico
-                echo json_encode(['mensaje'=>'El correo ha sido enviado']);
+                
             } catch (Exception $e) {
-                echo json_encode(['mensaje'=>'No se pudo enviar el mensaje. Error de correo:'.$mail->ErrorInfo]);
+               $res=$e;
               
             }
         }
+
+        echo json_encode(['mensaje'=>'El correo ha sido enviado']);
     }
     public static function buscarUsuario($correo, $pass){
-        $fallo=false;
+        $res=false;
         $usuario= Conexion::buscarUsuario($correo);
-        $login=Conexion::comprobarPass($usuario->id_usuario);
-        if($usuario instanceof Usuario && $login==md5($pass) ){
-            return $usuario; 
-        }else{
-            return $fallo;
+        if($usuario instanceof Usuario){
+            $login=Conexion::comprobarPass($usuario->id_usuario);
+            if($login==md5($pass) ){
+                $res= $usuario; 
+            }
         }
+        return $res;
        
     }
 

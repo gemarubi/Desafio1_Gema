@@ -13,13 +13,6 @@ class Partida{
         $this->id_usuario = $id_usuario;
     }
 
-    public function movimientoJugador($body){
-      
-            $this->vector[$body->origen]->cantidad-=$body->canTropas;
-            $this->vector[$body->destino]->cantidad+=$body->canTropas;
-      
-    }
-
     public function ataqueJugador($atacante, $defensor,$dadosJugador){
         $dadosMaquina=1;
         if($defensor->cantidad>1){
@@ -35,11 +28,10 @@ class Partida{
         return $dados=["dadosJugador"=>$dadosJugador,
                         "dadosMaquina"=>$dadosMaquina];
     }
-    public function movimientoMaquina($origen, $destino, $cantidad){
-        $this->vector[$origen->posicion]->cantidad-=$cantidad;
-        $this->vector[$destino->posicion]->cantidad+=$cantidad;
-        Conexion::guardarMovimiento($this->vector[$origen->posicion],$this->idPartida);
-        Conexion::guardarMovimiento( $this->vector[$destino->posicion],$this->idPartida);
+    public function movimiento($origen, $destino, $cantidad){
+        $this->vector[$origen]->cantidad-=$cantidad;
+        $this->vector[$destino]->cantidad+=$cantidad;
+    
          
     }
     public function reclutamiento(){
@@ -47,20 +39,35 @@ class Partida{
         $tropasM=array_filter($this->vector,function($territorio){
             return $territorio->tropa=='M';
             });
-            foreach ($tropasM as $key => $value) {
-                # code...
-                json_encode($value);
-            }
+           
            
         $tropasJ=array_filter($this->vector,function($territorio){
             return $territorio->tropa=='J';
             });
-          // $this->reparto($tropasM);
-           //$this->reparto($tropasJ);
            return ["tropasM"=>$tropasM, "tropasJ"=>$tropasJ];
        }
        
-   
+    public function haGanado(){
+        //1 gana la maquina
+        //2 gana el jugador
+
+        $resultado=false;
+        $tropasM=array_filter($this->vector,function($territorio){
+            return $territorio->tropa=='M';
+            });
+
+        $tropasJ=array_filter($this->vector,function($territorio){
+            return $territorio->tropa=='J';
+            });
+        if(count($tropasM)==0){
+            $this->resultado=2;
+            $resultado=true;
+        }else if(count($tropasJ)==0){
+            $this->resultado=1;
+            $resultado=true;
+        }
+        return $resultado;
+    }
     public function reparto($tropasM){
         $ejercitosM=floor(count($tropasM)/3);
         if($ejercitosM<3) $ejercitosM=3;
@@ -80,9 +87,6 @@ class Partida{
     public function turnoMaquina(){
 
         $respuesta=0;
-        //1 ataque
-        //2 movimiento
-        //3 pasar turno
                 $tJugador=array_filter($this->vector,function($territorio){
                     return $territorio->tropa=='J';
                 });
@@ -100,55 +104,101 @@ class Partida{
                 $tFuertes= array_filter($tMaquina, function($territorio){
                     return $territorio->cantidad>2;
                 });
-            
-            
+                
+                $aleatorio=rand(1,10);
             if(!empty($tFuertes) && $tropTotalesMa>=$tropTotalesJu){
+               
                 foreach ($tFuertes as $value) {
+                  
                     if($value->posicion>0 && $this->vector[$value->posicion-1]->tropa=='J' 
-                    && $this->vector[$value->posicion-1]->cantidad<$value->cantidad ){
-                       
+                    ){
+                      
                         $dados=$this->cuantosDados($value,$this->vector[$value->posicion-1]);
                         $value->atacar($this->vector[$value->posicion-1],$dados['atacante'],$dados['defensor']);
-                        Conexion::guardarMovimiento($this->vector[$value->posicion-1],$this->idPartida);
-                        Conexion::guardarMovimiento($value,$this->idPartida);
+                        $this->moverRestantes($value->posicion,$this->vector[$value->posicion-1]->posicion,$this->vector[$value->posicion+1]->posicion);
+                       
                     }else if($value->posicion<count($this->vector) && $this->vector[$value->posicion+1]->tropa=='J' 
-                    && $this->vector[$value->posicion+1]->cantidad<$value->cantidad ){
+                    ){
+                       
                         $dados=$this->cuantosDados($value,$this->vector[$value->posicion+1]);
                         $value->atacar($this->vector[$value->posicion+1],$dados['atacante'],$dados['defensor']);
-                        Conexion::guardarMovimiento($this->vector[$value->posicion+1],$this->idPartida);
-                        Conexion::guardarMovimiento($value,$this->idPartida);
-                         
+                        $this->moverRestantes($value->posicion,$this->vector[$value->posicion+1]->posicion,$this->vector[$value->posicion+1]->posicion);
                     }
-                }
-                $respuesta=1;
-
-            }else{
+               
                 
-                $queHacer=$this->deboMover($tFuertes);
-                if(count($queHacer)>1){
-                    $respuesta=2;
-                    $this->movimientoMaquina($queHacer['origen'],$queHacer['destino'],$queHacer['canTropas']);
-                }else{
-                    $respuesta=3;
+
                 }
+
+            }else if($aleatorio<=2){
+                foreach ($tMaquina as $value) {
+                    if($value->posicion>0 && $this->vector[$value->posicion-1]->tropa=='J' 
+                    && $this->vector[$value->posicion]->cantidad>1){
+                        $dados=$this->cuantosDados($value,$this->vector[$value->posicion-1]);
+                        $value->atacar($this->vector[$value->posicion-1],$dados['atacante'],$dados['defensor']);
+                        $this->moverRestantes($value->posicion,$this->vector[$value->posicion-1]->posicion);
+                    }else if($value->posicion>0 && $this->vector[$value->posicion+1]->tropa=='J' 
+                    && $this->vector[$value->posicion]->cantidad>1){
+                        $dados=$this->cuantosDados($value,$this->vector[$value->posicion+1]);
+                        $value->atacar($this->vector[$value->posicion+1],$dados['atacante'],$dados['defensor']);
+                        $this->moverRestantes($value->posicion, $this->vector[$value->posicion+1]->posicion);
+                    }
+                    
+                }
+            }else{
+                $tFuertes= array_filter($tMaquina, function($territorio){
+                    return $territorio->cantidad>1;
+                });
+                $queHacer=$this->deboMover($tFuertes);
+                if($queHacer["movimiento"]==1){
+                   
+                    $this->movimiento($queHacer['origen']->posicion,$queHacer['destino']->posicion,$queHacer['canTropas']);
+                    
+                    $respuesta=1;
+                }else {
+                    $respuesta=2;
+                }
+               
             }
-        return $respuesta;
         
+        return $respuesta;
+    }
+    function moverRestantes($maquina, $defensor){
+        if($this->vector[$maquina]->cantidad==0){
+            $this->vector[$maquina]->tropa='J';
+            $this->vector[$maquina]->cantidad=$this->vector[$defensor]->cantidad-1;
+            $this->vector[$defensor]->cantidad=1;
+        }
+        if($this->vector[$defensor]->cantidad==0){
+            $this->vector[$defensor]->tropa='M';
+            $this->vector[$defensor]->cantidad=$this->vector[$maquina]->cantidad-1;
+            $this->vector[$maquina]->cantidad=1;
+        }
+       
     }
 
     function deboMover($tFuertes){
-        $i=0;
-        $movimientoHecho=false;
+        
         $respuesta=['movimiento'=>0];
         //1-> si mueve
         //2-> no mueve
        
         foreach ($tFuertes as $value) {
-            if($this->vector[$value->posicion-1]->tropa=='M' && $this->vector[$value->posicion-2]->tropa=='J'){
+            if($value->posicion>1 && $value->posicion<count($tFuertes)-1
+            &&$this->vector[$value->posicion-1]->tropa=='M'
+            &&$this->vector[$value->posicion-1]->cantidad==1 
+            && $this->vector[$value->posicion-2]->tropa=='J'){
             
                 $respuesta=['movimiento'=>1,
                             'origen'=>$this->vector[$value->posicion],
                             'destino'=>$this->vector[$value->posicion-1],
+                            'canTropas'=>$this->vector[$value->posicion]->cantidad-1];
+            }else if($value->posicion>1 && $value->posicion<count($tFuertes)-1 
+            &&$this->vector[$value->posicion+1]->tropa=='M'
+            &&$this->vector[$value->posicion+1]->cantidad==1 
+            && $this->vector[$value->posicion+2]->tropa=='J'){
+                $respuesta=['movimiento'=>1,
+                            'origen'=>$this->vector[$value->posicion],
+                            'destino'=>$this->vector[$value->posicion+1],
                             'canTropas'=>$this->vector[$value->posicion]->cantidad-1];
             }
         }

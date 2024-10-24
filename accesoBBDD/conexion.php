@@ -56,9 +56,34 @@ class Conexion{
         }
 
     }
+    public static function cambiarResultado($partida){
+        try{
+            $conexion=self::conectar();
+            try {
+                
+                $consulta = "UPDATE PARTIDA SET RESULTADO = ? WHERE ID_PARTIDA = ?";
+                $stmt = $conexion->prepare($consulta);
+                $stmt->bind_param("ii",$partida->resultado, $partida->idPartida);
+                $stmt->execute();
+                $stmt->close();
+             
+               
+                return 1;
+            } catch(Exception $e){
+  
+                return 0;
+            }
+
+        }catch(Exception $e){
+        return -1;
+        }
+        finally{
+            self::desconectar($conexion);
+        }
+    }
 
     public static function guardarMovimiento($territorio, $idPartida){
-        json_encode($territorio);
+        
         try{
             $conexion=self::conectar();
             try {
